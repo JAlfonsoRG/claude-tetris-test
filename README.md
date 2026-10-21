@@ -42,6 +42,7 @@ Es una versión jugable del Tetris clásico con todas las mecánicas que esperar
 - **Sistema de puntuación** clásico de Tetris (100 / 300 / 500 / 800 multiplicado por nivel).
 - **Niveles** que aumentan cada 10 líneas y aceleran la caída.
 - **Pausa** y **Game Over** con opción de reinicio.
+- **Tabla de records local** (top 5 guardado en `localStorage`): pantalla de inicio con la tabla, nombre del jugador al entrar en el top, mejor combo y líneas máximas, y botón para borrar los records.
 
 ---
 
@@ -99,6 +100,7 @@ Define la estructura visual:
 - Un `<canvas id="board">` de **300 × 600** píxeles donde se renderiza el tablero.
 - Un panel lateral con `SCORE`, `LINES`, `LEVEL`, vista de la siguiente pieza y la lista de controles.
 - Un overlay para los estados **PAUSA** y **GAME OVER**.
+- Una **pantalla de inicio** (`#start-screen`) con la tabla de records y el botón **Jugar**; la partida no empieza hasta pulsarlo.
 
 ### 2. `style.css`
 
@@ -117,6 +119,7 @@ Contiene toda la lógica del juego. A grandes rasgos:
 - **Puntuación**: usa la tabla clásica `[0, 100, 300, 500, 800]` multiplicada por el nivel actual; el hard drop suma 2 puntos por celda recorrida y el soft drop 1 punto por fila.
 - **Nivel y velocidad**: el nivel sube cada 10 líneas; la velocidad de caída se calcula como `max(100, 1000 − (level − 1) × 90)` milisegundos.
 - **Ghost piece** (`ghostY`): proyecta la posición final de la pieza actual hacia abajo y la dibuja con `globalAlpha = 0.2`.
+- **Records** (`loadRecords` / `saveRecords`): el top 5 se guarda en `localStorage` bajo la clave `tetrisRecords` junto con el mejor combo (piezas consecutivas que limpian líneas) y las líneas máximas en una partida. Los datos leídos se validan y, si están corruptos, se ignoran.
 
 ### Flujo del juego
 

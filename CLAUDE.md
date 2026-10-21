@@ -30,6 +30,8 @@ Key points in `game.js` that span multiple functions:
 - **Rendering** redraws the full board every frame (`draw()`); the next-piece preview (`drawNext()`) is only redrawn on `spawn()`. `drawBlock()` is shared by both canvases and takes the context and cell size.
 - **HUD** (`updateHUD()`) is updated imperatively after state changes, not per frame.
 - **One overlay** (`#overlay`) is reused for both PAUSA and GAME OVER by rewriting `#overlay-title` / `#overlay-score`.
+- **Start screen** (`#start-screen`, a second `.overlay`) is visible on load; the game does not run until "Jugar" (`startGame()` → `init()`). `init()` hides it. While it is visible, or while `#name-input` has focus, the global keydown handler returns early.
+- **Records** live in `localStorage['tetrisRecords']` as `{ scores:[{name,score,lines,level,date}], bestCombo, maxLines }` (top 5) and the last used name in `tetrisLastName`. Always read through `loadRecords()`, which sanitizes/validates and falls back to empty data. `lockPiece()` calls `trackCombo()` (combo = consecutive pieces that clear lines; `maxCombo` per game). `endGame()` calls `showGameOverRecords()`, which updates `bestCombo`/`maxLines` and, if the score enters the top 5, shows the name entry inside `#records-panel` (in the game-over overlay box). `buildRecordsView()` renders the table into `#start-records` / `#gameover-records` using `textContent` only.
 
 ## Coupled values
 
