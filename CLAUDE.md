@@ -29,7 +29,8 @@ Key points in `game.js` that span multiple functions:
 - **Game loop:** `requestAnimationFrame`-driven; `dropAccum` accumulates ms and steps gravity when it exceeds `dropInterval`. Pause/game-over stop it via `cancelAnimationFrame(animId)`; resuming resets `lastTime` to avoid a large `dt` jump.
 - **Rendering** redraws the full board every frame (`draw()`); the next-piece preview (`drawNext()`) is only redrawn on `spawn()`. `drawBlock()` is shared by both canvases and takes the context and cell size.
 - **HUD** (`updateHUD()`) is updated imperatively after state changes, not per frame.
-- **One overlay** (`#overlay`) is reused for both PAUSA and GAME OVER by rewriting `#overlay-title` / `#overlay-score`.
+- **Overlays:** `#overlay` is used only for GAME OVER (`#overlay-title` / `#overlay-score`). Pause uses its own `#pause-menu` (Reanudar / Reiniciar / Ver controles / Nivel inicial), opened/closed with `P` or `Escape` via `togglePause()` → `openPauseMenu()` / `resumeGame()`. While `paused` the keydown handler ignores every game key; after resuming/restarting, `ignoreRepeat` drops `e.repeat` events until a fresh keydown. `hidePauseMenu()` blurs focused menu controls so Space/Enter/arrows can't re-trigger them.
+- **Start level:** `startLevel` (1–10) is a persisted preference (`localStorage` key `startLevel`), not game state, so `init()` doesn't reset it; it copies it into `baseLevel`. `clearLines()` computes `level = baseLevel + floor(lines / 10)` and `dropInterval = dropIntervalFor(level)`, so changing the selector mid-game only affects the next game.
 
 ## Coupled values
 
